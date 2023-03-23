@@ -1,0 +1,21 @@
+import pandas as pd
+
+dt = pd.read_csv("~/git/rerps-devel/examples/capexp2021rerps/data/CAPExp.csv")
+
+electrodes = ["Fp1", "Fp2", "F7", "F3", "Fz", "F4", "F8", "FC5", "FC1",
+              "FC2", "FC6", "C3", "Cz", "C4", "CP5", "CP1", "CP2", "CP6",
+              "P7", "P3", "Pz", "P4", "P8", "O1", "Oz", "O2"]
+
+# averaging by trial ...
+N400_by_trial = dt[dt["Timestamp"].isin(range(300,500))].groupby(["TrialNum", "Subject", "Condition"])[electrodes].mean()
+P600_by_trial = dt[dt["Timestamp"].isin(range(600,1000))].groupby(["TrialNum", "Subject", "Condition"])[electrodes].mean()
+
+N400_by_trial.to_csv("N400_by_trial.csv")
+P600_by_trial.to_csv("P600_by_trial.csv")
+
+# averaging by subject ...
+N400_by_subject = dt[dt["Timestamp"].isin(range(300,500))].groupby(["Subject", "Condition"])[electrodes].mean()
+P600_by_subject = dt[dt["Timestamp"].isin(range(600,1000))].groupby(["Subject", "Condition"])[electrodes].mean()
+ 
+N400_by_subject.to_csv("N400_by_subject.csv")
+P600_by_subject.to_csv("P600_by_subject.csv")
