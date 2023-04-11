@@ -1,0 +1,6 @@
+import pandas as pd
+
+data = pd.read_csv("dbc_data.csv")
+condition_baseline = data[data['Condition'] =='baseline']
+condition_plausible = data[data["Condition"] == "plausible"]
+condition_inplausible = data[data["Condition"] == "inplausible"]        
