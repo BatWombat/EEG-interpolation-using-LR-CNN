@@ -28,4 +28,4 @@ for train_index, val_index in kf.split(X):
     cv_score = cross_val_score(lr, X_val, y_val, scoring = "r2")
     
 mse_scores.append(cv_score.mean())
-print("Final CV Score: {}".format(np.mean(mse_scores)))
+print("R^2 score : {}, Final CV Score: {}".format(R2_score, np.mean(mse_scores)))
