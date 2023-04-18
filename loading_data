@@ -1,6 +1,18 @@
 import pandas as pd
 
-data = pd.read_csv("dbc_data.csv")
-condition_baseline = data[data['Condition'] =='baseline']
-condition_plausible = data[data["Condition"] == "plausible"]
-condition_inplausible = data[data["Condition"] == "inplausible"]        
+dt = pd.read_csv("dbc_data.csv")
+condition_baseline = dt[dt['Condition'] =='baseline']
+condition_plausible = dt[dt["Condition"] == "plausible"]
+condition_inplausible = dt[dt["Condition"] == "inplausible"] 
+
+N400_by_trial = dt[dt["Timestamp"].isin(range(300,500))].groupby(["TrialNum", "Subject", "Condition"])[electrodes].mean()
+P600_by_trial = dt[dt["Timestamp"].isin(range(600,1000))].groupby(["TrialNum", "Subject", "Condition"])[electrodes].mean()
+
+N400_by_trial.to_csv("N400_by_trial.csv")
+P600_by_trial.to_csv("P600_by_trial.csv")
+
+N400_by_subject = dt[dt["Timestamp"].isin(range(300,500))].groupby(["Subject", "Condition"])[electrodes].mean()
+P600_by_subject = dt[dt["Timestamp"].isin(range(600,1000))].groupby(["Subject", "Condition"])[electrodes].mean()
+ 
+N400_by_subject.to_csv("N400_by_subject.csv")
+P600_by_subject.to_csv("P600_by_subject.csv")
