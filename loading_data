@@ -1,18 +1,20 @@
 import pandas as pd
 
-dt = pd.read_csv("dbc_data.csv")
-condition_baseline = dt[dt['Condition'] =='baseline']
-condition_plausible = dt[dt["Condition"] == "plausible"]
-condition_inplausible = dt[dt["Condition"] == "inplausible"] 
+data = pd.read_csv("Datasets/dbc_data.csv")
+condition_baseline = data[data['Condition'] =='baseline']
+condition_plausible = data[data["Condition"] == "plausible"]
+condition_implausible = data[data["Condition"] == "implausible"]
 
-N400_by_trial = dt[dt["Timestamp"].isin(range(300,500))].groupby(["TrialNum", "Subject", "Condition"])[electrodes].mean()
-P600_by_trial = dt[dt["Timestamp"].isin(range(600,1000))].groupby(["TrialNum", "Subject", "Condition"])[electrodes].mean()
+drops = ["HEOG", "AFz", "VEOG", "Assoc", "Plaus", "Cloze", "ItemNum", "TrialNum", "Condition"]
 
-N400_by_trial.to_csv("N400_by_trial.csv")
-P600_by_trial.to_csv("P600_by_trial.csv")
+for i in drops:
+        condition_implausible = condition_implausible.drop(axis=1, labels = i)
+        condition_plausible = condition_plausible.drop(axis=1, labels = i)
+        condition_baseline = condition_baseline.drop(axis=1, labels = i)
 
-N400_by_subject = dt[dt["Timestamp"].isin(range(300,500))].groupby(["Subject", "Condition"])[electrodes].mean()
-P600_by_subject = dt[dt["Timestamp"].isin(range(600,1000))].groupby(["Subject", "Condition"])[electrodes].mean()
- 
-N400_by_subject.to_csv("N400_by_subject.csv")
-P600_by_subject.to_csv("P600_by_subject.csv")
+condition_plausible[condition_plausible["Timestamp"].isin(range(600,1001))].to_csv("Plausible_P600.csv", index = False )
+condition_implausible[condition_implausible["Timestamp"].isin(range(600,1001))].to_csv("Implausible_P600.csv", index = False )
+condition_baseline[condition_baseline["Timestamp"].isin(range(600,1001))].to_csv("Baseline_P600.csv", index = False )
+condition_plausible[condition_plausible["Timestamp"].isin(range(300,501))].to_csv("Plausible_N400.csv", index = False )
+condition_implausible[condition_implausible["Timestamp"].isin(range(300,501))].to_csv("Implausible_N400.csv", index = False )
+condition_baseline[condition_baseline["Timestamp"].isin(range(300,501))].to_csv("Baseline_N400.csv", index = False )
