@@ -1,0 +1,59 @@
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.model_selection import KFold
+from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
+
+data_2021 = pd.read_csv("Plausible_P600.csv")
+
+cols = ["FC1", "FC2", "CP1", "CP2"]
+X = data_2021[cols].values
+y = data_2021["Cz"].values
+
+degree = 2
+n_folds = 10
+kf = KFold(n_splits=n_folds)
+mse_scores = []
+y_pred_all = np.empty_like(y)
+
+for train_index, test_index in kf.split(X):
+   
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+   
+    poly = PolynomialFeatures(degree = degree)
+    X_train_poly = poly.fit_transform(X_train)
+    X_test_poly = poly.transform(X_test)
+
+    model = LinearRegression()
+    model.fit(X_train_poly, y_train)
+    
+
+
+data_2019 = pd.read_csv('2019_script-related_P600.csv')
+X_2019 = data_2019[cols]
+y_2019 = pd.DataFrame(data_2019['Cz'])
+timestamps = data_2019["Timestamp"]
+
+X_poly_2019 = poly.transform(X_2019)
+y_pred = model.predict(X_poly_2019)
+    
+mse = mean_squared_error(y_2019, y_pred)
+print('MSE score:', mse)
+
+    
+mean_pred = []
+mean_actual = []
+for ts in timestamps:
+    idx = np.where(data_2019["Timestamp"].values == ts)[0]
+    mean_pred.append(np.mean(y_pred[idx]))
+    mean_actual.append(np.mean(y_2019.values[idx]))
+
+plt.plot(timestamps, mean_pred, label="Predicted")
+plt.plot(timestamps, mean_actual, label="Actual", c = 'r')
+plt.legend()
+plt.xlabel("Timestamp")
+plt.ylabel("Mean value")
+plt.show()
