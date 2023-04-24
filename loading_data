@@ -18,3 +18,25 @@ condition_baseline[condition_baseline["Timestamp"].isin(range(600,1001))].to_csv
 condition_plausible[condition_plausible["Timestamp"].isin(range(300,501))].to_csv("Plausible_N400.csv", index = False )
 condition_implausible[condition_implausible["Timestamp"].isin(range(300,501))].to_csv("Implausible_N400.csv", index = False )
 condition_baseline[condition_baseline["Timestamp"].isin(range(300,501))].to_csv("Baseline_N400.csv", index = False )
+
+
+import pandas as pd
+
+data = pd.read_csv("dbc_data_2019.csv")
+condition_control = data[data['Condition'] =='control']
+condition_script_related = data[data["Condition"] == "script-related"]
+condition_script_unrelated = data[data["Condition"] == "script-unrelated"]
+
+drops = ["HEOG", "VEOG", "Assoc", "Plaus", "ItemNum", "Condition"]
+
+for i in drops:
+        condition_script_unrelated = condition_script_unrelated.drop(axis=1, labels = i)
+        condition_script_related = condition_script_related.drop(axis=1, labels = i)
+        condition_control = condition_control.drop(axis=1, labels = i)
+
+condition_script_related[condition_script_related["Timestamp"].isin(range(600,1001))].to_csv("2019_script-related_P600.csv", index = False )
+condition_script_unrelated[condition_script_unrelated["Timestamp"].isin(range(600,1001))].to_csv("2019_script-unrelated_P600.csv", index = False )
+condition_control[condition_control["Timestamp"].isin(range(600,1001))].to_csv("2019_Control_P600.csv", index = False )
+condition_script_related[condition_script_related["Timestamp"].isin(range(300,501))].to_csv("2019_script-related_N400.csv", index = False )
+condition_script_unrelated[condition_script_unrelated["Timestamp"].isin(range(300,501))].to_csv("2019_script-unrelated_N400.csv", index = False )
+condition_control[condition_control["Timestamp"].isin(range(300,501))].to_csv("2019_Control_N400.csv", index = False )
