@@ -7,43 +7,52 @@ import matplotlib.pyplot as plt
 
 cols = ["F3", "Fz", "F4", "C3", "Cz", "C4", "P3", "Pz", "P4"]
 
-data_2021 = pd.read_csv("Baseline_N400.csv")
-data_2019 = pd.read_csv('2019_Control_N400.csv')
-timestamps = data_2019["Timestamp"]
+datalist_2021 = ["Baseline_N400.csv", "Baseline_P600.csv", "Plausible_N400.csv", "Plausible_P600.csv", "Implausible_N400.csv", "Implausible_P600.csv"]
+datalist_2019 = ["2019_Control_N400.csv", "2019_script-related_P600.csv", "2019_script-related_N400.csv", "2019_script-related_P600.csv", "2019_script-unrelated_N400.csv", "2019_script-unrelated_P600.csv"]
 
-fig, axs = plt.subplots(3, 3, figsize = (10, 10))
-axs = axs.flatten()
 
-degree = 2
-poly = PolynomialFeatures(degree = degree)
+for j, filename in enumerate(datalist_2021):
+    
+    data_2021 = pd.read_csv(filename)
+    data_2019 = pd.read_csv(datalist_2019[j])
+    
+    timestamps = data_2019["Timestamp"]
 
-for i, col in enumerate(cols):
-    X = data_2021[cols].drop(col, axis = 1)
-    y = data_2021[col]
+    fig, axs = plt.subplots(3, 3, figsize = (10, 10))
+    axs = axs.flatten()
+
+    degree = 2
+    poly = PolynomialFeatures(degree = degree)
+
+    for i, col in enumerate(cols):
+        X = data_2021[cols].drop(col, axis = 1)
+        y = data_2021[col]
     
-    X_poly = poly.fit_transform(X)
+        X_poly = poly.fit_transform(X)
     
-    model = LinearRegression()
-    model.fit(X_poly, y)
+        model = LinearRegression()
+        model.fit(X_poly, y)
     
-    X_2019 = data_2019[cols].drop(col, axis = 1)
-    y_2019 = data_2019[col]
+        X_2019 = data_2019[cols].drop(col, axis = 1)
+        y_2019 = data_2019[col]
     
-    X_poly_2019 = poly.transform(X_2019)
-    y_pred = model.predict(X_poly_2019)
+        X_poly_2019 = poly.transform(X_2019)
+        y_pred = model.predict(X_poly_2019)
     
-    mse = mean_squared_error(y_2019, y_pred)
+        mse = mean_squared_error(y_2019, y_pred)
    
-    actual_means = y_2019.groupby(timestamps).mean()
-    pred_means = pd.Series(y_pred, index = y_2019.index).groupby(timestamps).mean()
+        actual_means = y_2019.groupby(timestamps).mean()
+        pred_means = pd.Series(y_pred, index = y_2019.index).groupby(timestamps).mean()
 
-
-    axs[i].plot(actual_means.index, actual_means.values, label="Actual")
-    axs[i].plot(pred_means.index, pred_means.values, label="Predicted", c="r")
-    axs[i].legend()
-    axs[i].set_title("{} MSE score: {:.2f}".format(col, mse))
-    axs[i].set_xlabel("Timestamp")
-    axs[i].set_ylabel("Mean value".format(col))
-
-plt.tight_layout()
-plt.show()
+        axs[i].plot(actual_means.index, actual_means.values, label="Actual")
+        axs[i].plot(pred_means.index, pred_means.values, label="Predicted", c="r")
+        axs[i].legend()
+        axs[i].set_title("{} MSE score: {:.2f}".format(col, mse))
+        axs[i].set_xlabel("Timestamp")
+        axs[i].set_ylabel("Mean value".format(col))
+    
+    
+    
+    fig.suptitle(filename[:-4])
+    plt.tight_layout()
+    plt.show()
