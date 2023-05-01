@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 cols = ["F3", "Fz", "F4", "C3", "Cz", "C4", "P3", "Pz", "P4"]
 
 datalist_2021 = ["Baseline_N400.csv", "Baseline_P600.csv", "Plausible_N400.csv", "Plausible_P600.csv", "Implausible_N400.csv", "Implausible_P600.csv"]
-datalist_2019 = ["2019_Control_N400.csv", "2019_script-related_P600.csv", "2019_script-related_N400.csv", "2019_script-related_P600.csv", "2019_script-unrelated_N400.csv", "2019_script-unrelated_P600.csv"]
+datalist_2019 = ["2019_Control_N400.csv", "2019_Control_P600.csv", "2019_script-related_N400.csv", "2019_script-related_P600.csv", "2019_script-unrelated_N400.csv", "2019_script-unrelated_P600.csv"]
 
 
 for j, filename in enumerate(datalist_2021):
