@@ -22,8 +22,7 @@ for j, filename in enumerate(datalist_2021):
 
     for i, col in enumerate(cols):
         X = data_2021[cols].drop(col, axis = 1)
-        y = data_2021[col]
-    
+        y = data_2021[col]    
     
         model = LinearRegression()
         model.fit(X, y)
@@ -31,9 +30,7 @@ for j, filename in enumerate(datalist_2021):
         X_2019 = data_2019[cols].drop(col, axis = 1)
         y_2019 = data_2019[col]
     
-        y_pred = model.predict(X_2019)
-    
-       
+        y_pred = model.predict(X_2019)       
    
         actual_means = y_2019.groupby(timestamps).mean()
         pred_means = pd.Series(y_pred, index = y_2019.index).groupby(timestamps).mean()
