@@ -32,12 +32,11 @@ for j, filename in enumerate(datalist_2021):
         y_2019 = data_2019[col]
     
         y_pred = model.predict(X_2019)
-    
-        mse = mean_squared_error(y_2019, y_pred)
    
         actual_means = y_2019.groupby(timestamps).mean()
         pred_means = pd.Series(y_pred, index = y_2019.index).groupby(timestamps).mean()
-
+        
+        mse = mean_squared_error(actual_means, pred_means)
 
         axs[i].plot(actual_means.index, actual_means.values, label="Actual")
         axs[i].plot(pred_means.index, pred_means.values, label="Predicted", c="r")
