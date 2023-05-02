@@ -1,0 +1,36 @@
+def build_model():
+# Define the input shape of the EEG data
+    input_shape = (X_test.shape[1], X_test.shape[2])
+
+        # Define the model architecture
+    model = keras.Sequential([
+
+        # Add convolutional layers
+        layers.Conv1D(32, 3, activation='relu', input_shape=input_shape),
+        layers.BatchNormalization(),
+        layers.MaxPooling1D(2),
+
+        layers.Conv1D(64, 3, activation='relu'),
+        layers.BatchNormalization(),
+        layers.MaxPooling1D(2),
+
+        # Add flatten layer
+        layers.Flatten(),
+
+        # Add dense layers
+        layers.Dense(64, activation='relu'),
+        layers.BatchNormalization(),
+        
+
+        layers.Dense(32, activation='relu'),
+        layers.BatchNormalization(),
+        
+
+        # Add output layer
+        layers.Dense(1, activation='linear')
+    ])
+
+    # Compile the model
+    model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), metrics=['mse'])
+    
+    return model
