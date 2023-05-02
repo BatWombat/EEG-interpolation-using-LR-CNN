@@ -1,0 +1,37 @@
+import pandas as pd
+
+data = pd.read_csv("Datasets/dbc_data.csv")
+condition_baseline = data[data['Condition'] =='baseline']
+condition_plausible = data[data["Condition"] == "plausible"]
+condition_implausible = data[data["Condition"] == "implausible"]
+
+drops = ["HEOG", "AFz", "VEOG", "Assoc", "Plaus", "Cloze", "ItemNum", "TrialNum", "Condition"]
+
+for i in drops:
+        condition_implausible = condition_implausible.drop(axis=1, labels = i)
+        condition_plausible = condition_plausible.drop(axis=1, labels = i)
+        condition_baseline = condition_baseline.drop(axis=1, labels = i)
+
+condition_plausible[condition_plausible["Timestamp"].isin(range(0,1001))].to_csv("Plausible.csv", index = False )
+condition_implausible[condition_implausible["Timestamp"].isin(range(0,1001))].to_csv("Implausible.csv", index = False )
+condition_baseline[condition_baseline["Timestamp"].isin(range(0,1001))].to_csv("Baseline.csv", index = False )
+
+
+
+import pandas as pd
+
+data = pd.read_csv("dbc_data_2019.csv")
+condition_control = data[data['Condition'] =='control']
+condition_script_related = data[data["Condition"] == "script-related"]
+condition_script_unrelated = data[data["Condition"] == "script-unrelated"]
+
+drops = ["HEOG", "VEOG", "Assoc", "Plaus", "ItemNum", "Condition"]
+
+for i in drops:
+        condition_script_unrelated = condition_script_unrelated.drop(axis=1, labels = i)
+        condition_script_related = condition_script_related.drop(axis=1, labels = i)
+        condition_control = condition_control.drop(axis=1, labels = i)
+
+condition_script_related[condition_script_related["Timestamp"].isin(range(0,1001))].to_csv("2019_script-related.csv", index = False )
+condition_script_unrelated[condition_script_unrelated["Timestamp"].isin(range(0,1001))].to_csv("2019_script-unrelated.csv", index = False )
+condition_control[condition_control["Timestamp"].isin(range(0,1001))].to_csv("2019_Control.csv", index = False )
