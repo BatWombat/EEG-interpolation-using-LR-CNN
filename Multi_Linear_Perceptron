@@ -1,0 +1,52 @@
+import numpy as np
+import pandas as pd
+from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
+from sklearn.neural_network import MLPRegressor
+
+cols = ["F3", "Fz", "F4", "C3", "Cz", "C4", "P3", "Pz", "P4", 'Timestamp']
+
+datalist_2021 = ["Baseline.csv", "Plausible.csv", "Implausible.csv"]
+datalist_2019 = ["2019_Control.csv", "2019_script-related.csv", "2019_script-unrelated.csv"]
+
+
+for j, filename in enumerate(datalist_2021):
+    
+    data_2021 = pd.read_csv('Datasets/{}'.format(filename))
+    data_2019 = pd.read_csv('Datasets/{}'.format(datalist_2019[j]))
+    
+    timestamps = data_2019["Timestamp"]
+
+    fig, axs = plt.subplots(3, 3, figsize = (15, 15))
+    axs = axs.flatten()
+
+    for i, col in enumerate(cols):
+        X = data_2021[cols].drop(col, axis = 1)
+        if col == 'Timestamp':
+            continue
+        y = data_2021[col]
+    
+    
+        model = MLPRegressor(activation = 'relu', max_iter = 1000, early_stopping = True, validation_fraction = 0.135, tol = 0.0005)
+        model.fit(X, y)
+    
+        X_test = data_2019[cols].drop(col, axis = 1)
+        y_test = data_2019[col]
+    
+        y_pred = model.predict(X_test)      
+   
+        actual_means = y_test.groupby(timestamps).mean()
+        pred_means = pd.Series(y_pred, index = y_test.index).groupby(timestamps).mean()
+        
+        mse = mean_squared_error(actual_means, pred_means)
+
+        axs[i].plot(actual_means.index, actual_means.values, label="Actual")
+        axs[i].plot(pred_means.index, pred_means.values, label="Predicted", c="r")
+        axs[i].legend()
+        axs[i].set_title("{} MSE score: {:.2f}".format(col, mse))
+        axs[i].set_xlabel("Timestamp")
+        axs[i].set_ylabel("Mean value".format(col))
+
+    fig.suptitle(filename[:-4])
+    plt.tight_layout()
+    plt.show()
