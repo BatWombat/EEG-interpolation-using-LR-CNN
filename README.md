@@ -29,5 +29,8 @@ To run the CNN model, you need:
   * numpy
   * matplotlib
   * sklearn
+  * tensorflow 
+  * keras
+  * __future__ 
 * CUDA Toolkit 11.8
 * cuDNN SDK 8.6.0
