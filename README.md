@@ -34,3 +34,7 @@ To run the CNN model, you need:
   * __future__ 
 * CUDA Toolkit 11.8
 * cuDNN SDK 8.6.0
+
+Resources for installing Tensorflow supported with GPU can be found in the links below:
+* Setting Up CUDA, CUDNN, Keras, and TensorFlow on Windows 11 for GPU Deep Learning: https://www.youtube.com/watch?v=OEFKlRSd8Ic&t=1181s
+* Install TensorFlow with pip: https://www.tensorflow.org/install/pip
