@@ -1,6 +1,6 @@
 import pandas as pd
 
-data = pd.read_csv("Datasets/dbc_data.csv")
+data = pd.read_csv("dbc_data.csv")
 condition_baseline = data[data['Condition'] =='baseline']
 condition_plausible = data[data["Condition"] == "plausible"]
 condition_implausible = data[data["Condition"] == "implausible"]
@@ -32,6 +32,6 @@ for i in drops:
         condition_script_related = condition_script_related.drop(axis=1, labels = i)
         condition_control = condition_control.drop(axis=1, labels = i)
 
-condition_script_related[condition_script_related["Timestamp"].isin(range(0,1001))].to_csv("2019_script-related.csv", index = False )
-condition_script_unrelated[condition_script_unrelated["Timestamp"].isin(range(0,1001))].to_csv("2019_script-unrelated.csv", index = False )
+condition_script_related[condition_script_related["Timestamp"].isin(range(0,1001))].to_csv("2019_Script-Related.csv", index = False )
+condition_script_unrelated[condition_script_unrelated["Timestamp"].isin(range(0,1001))].to_csv("2019_Script-Unrelated.csv", index = False )
 condition_control[condition_control["Timestamp"].isin(range(0,1001))].to_csv("2019_Control.csv", index = False )
