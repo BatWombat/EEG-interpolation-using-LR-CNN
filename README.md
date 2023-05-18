@@ -1,13 +1,11 @@
 # Research-Workshop
 ## About :
 
-Our regression models are trained on this waveform estimation (rERP) analysis detailed in:
-
-https://github.com/caurnhammer/PLOSONE21lmerERP
+The models are trained on the dataset as described in this paper:
+https://github.com/hbrouwer/dbc2021rerps/releases
 
 And are tested on the dataset described in this Paper:
-
-[Delogu, F., Brouwer, H., and Crocker, M. W. (2019). Event-related potentials index lexical retrieval (N400) and integration (P600) during language comprehension. *Brain and Cognition, 135*. doi: 10.1016/j.bandc.2019.05.007](https://www.sciencedirect.com/science/article/pii/S0278262618304299)
+https://github.com/hbrouwer/dbc2019rerps/releases
 
 ## Requirements :
 To load the data, you need :
