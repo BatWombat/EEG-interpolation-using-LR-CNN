@@ -1,53 +1,77 @@
+#importing the libraries 
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 
+#adding the electrode names and the timestamp as input feature
 cols = ["Fz", "Cz", "Pz", "C3", "F3", "C4", "P3", "F4", "P4", 'Timestamp']
 
+#add the different datasets to a list
 datalist_train = ["Baseline.csv", "Plausible.csv", "Implausible.csv"]
 datalist_test = ["2019_Control.csv", "2019_Script-Related.csv", "2019_Script-Unrelated.csv"]
 
 
+#creating a loop for the different datasets
 for j, filename in enumerate(datalist_train):
     
+    #loading the corresponding training data and testing data
     data_train = pd.read_csv('Datasets/{}'.format(filename))
     data_test = pd.read_csv('Datasets/{}'.format(datalist_test[j]))
     
+    #assigning timestamp to a variable for later use
     timestamps = data_test["Timestamp"]
-
+    
+    #Configuring the layout of the plots
     fig, axs = plt.subplots(3, 3, figsize = (10, 10))
     axs = axs.flatten()
-
+    
+    #creating a loop in the different input features in the dataset
     for i, col in enumerate(cols):
+        #dropping the electrode to be predicted from the input feautres
         X_train = data_train[cols].drop(col, axis = 1)
+        #Making sure that the timestamp will not be predicted
         if col == 'Timestamp':
             continue
+        #adding the selected electrode as the target variable for the training dataset
         y_train = data_train[col] 
     
-    
+        #creating and fitting the model on the training data
         model = LinearRegression()
         model.fit(X_train, y_train)
-    
+        
+        #dropping the electrode to be predicted from the input feautres and adding to the target variable for the testing data
         X_test = data_test[cols].drop(col, axis = 1)
         y_test = data_test[col]
-    
+        
+        #predicting the target electrode
         y_pred = model.predict(X_test)       
-   
+           
+        #grouping true voltages with their corresponding timestamp and then taking the mean of every timestamp
         actual_means = y_test.groupby(timestamps).mean()
+        
+        #changing the type of predicted voltages to pandas series, grouping with corresponding timestamp and then taking the mean of every timestamp
         pred_means = pd.Series(y_pred, index = y_test.index).groupby(timestamps).mean()
         
+        #calculating the mse of the averages (this is the average mse over all trials) 
         mse = mean_squared_error(actual_means, pred_means)
-
+        
+        #plotting the average true and predicted EEG signal by Voltage against corresponding timestamp
         axs[i].plot(actual_means.index, actual_means.values, label="Means of Actual Voltages")
         axs[i].plot(pred_means.index, pred_means.values, label="Means of Predicted Voltagess", c="r")
+        #adding legend
         axs[i].legend()
+        #adding title of target electrode with MSE score
         axs[i].set_title("{} MSE score: {:.2f}".format(col, mse))
+        #labeling x-axis
         axs[i].set_xlabel("Timestamp (ms)")
+        #labeling y-axis
         axs[i].set_ylabel("Voltage (μV)".format(col))
+        #inverting y-axis, this is common for EEG and ERP signals
         axs[i].invert_yaxis()
-
+    #adding title of the condition
     fig.suptitle("EEG interpolation of {} condition".format(datalist_test[j][5:-4]))
+    #fitting plots in the figure area
     plt.tight_layout()
-    plt.show()
+    plt.show()
