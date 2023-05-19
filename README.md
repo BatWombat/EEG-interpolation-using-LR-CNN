@@ -13,7 +13,7 @@ To load the data, you need :
 * A recent version of Python 3, with recent versions of:
   * pandas
  
-To run the linear regression model, you need:
+To run the code for linear regression model, you need:
 
 * A recent version of Python 3, with recent versions of:
   * pandas
@@ -21,7 +21,7 @@ To run the linear regression model, you need:
   * matplotlib
   * sklearn
  
-To run the CNN model, you need:
+To run the code for CNN model, you need:
 * A version of Python 3.9.5, with tensorflow 2.10 as a kernel and recent versions of:
   * pandas
   * numpy
