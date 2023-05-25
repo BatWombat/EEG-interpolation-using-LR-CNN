@@ -1,37 +1,46 @@
+#import library
 import pandas as pd
 
+#opening the dataset and creating a dataset for each condition
 data = pd.read_csv("dbc_data.csv")
 condition_baseline = data[data['Condition'] =='baseline']
 condition_plausible = data[data["Condition"] == "plausible"]
 condition_implausible = data[data["Condition"] == "implausible"]
 
+#assigning unused columns to list
 drops = ["HEOG", "AFz", "VEOG", "Assoc", "Plaus", "Cloze", "ItemNum", "TrialNum", "Condition"]
 
+#dropping the unused columns for each condition
 for i in drops:
         condition_implausible = condition_implausible.drop(axis=1, labels = i)
         condition_plausible = condition_plausible.drop(axis=1, labels = i)
         condition_baseline = condition_baseline.drop(axis=1, labels = i)
 
+#cropping each trial in the time wanted (here from 0 to 1000ms) and saving to csv file with the respective name
 condition_plausible[condition_plausible["Timestamp"].isin(range(0,1001))].to_csv("Plausible.csv", index = False )
 condition_implausible[condition_implausible["Timestamp"].isin(range(0,1001))].to_csv("Implausible.csv", index = False )
 condition_baseline[condition_baseline["Timestamp"].isin(range(0,1001))].to_csv("Baseline.csv", index = False )
 
 
-
+#import library
 import pandas as pd
 
+#opening the dataset and creating a dataset for each condition
 data = pd.read_csv("dbc_data_2019.csv")
 condition_control = data[data['Condition'] =='control']
 condition_script_related = data[data["Condition"] == "script-related"]
 condition_script_unrelated = data[data["Condition"] == "script-unrelated"]
 
+#assigning unused columns to list
 drops = ["HEOG", "VEOG", "Assoc", "Plaus", "ItemNum", "Condition"]
 
+#dropping the unused columns for each condition
 for i in drops:
         condition_script_unrelated = condition_script_unrelated.drop(axis=1, labels = i)
         condition_script_related = condition_script_related.drop(axis=1, labels = i)
         condition_control = condition_control.drop(axis=1, labels = i)
 
+#cropping each trial in the time wanted (here from 0 to 1000ms) and saving to csv file with the respective name
 condition_script_related[condition_script_related["Timestamp"].isin(range(0,1001))].to_csv("2019_Script-Related.csv", index = False )
 condition_script_unrelated[condition_script_unrelated["Timestamp"].isin(range(0,1001))].to_csv("2019_Script-Unrelated.csv", index = False )
-condition_control[condition_control["Timestamp"].isin(range(0,1001))].to_csv("2019_Control.csv", index = False )
+condition_control[condition_control["Timestamp"].isin(range(0,1001))].to_csv("2019_Control.csv", index = False )
